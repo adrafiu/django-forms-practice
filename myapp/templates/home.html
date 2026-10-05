@@ -1,0 +1,105 @@
+{% extends 'base.html' %} {% block title %}
+<title>Home</title>
+{% endblock title %} {% block content %}
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Blog Management</h1>
+
+  <!-- Blog Form -->
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4 class="mb-3">Add New Blog</h4>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label">Title</label>
+          {{ form.title }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Author Name</label>
+          {{ form.author_name }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Category</label>
+          {{ form.category }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Content</label>
+          {{ form.content }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Image</label>
+          {{ form.image }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Blog</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Blog Table -->
+
+  <h4 class="mb-3">All Blogs</h4>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Image</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Category</th>
+        <th>Content</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for blog in blogs %}
+
+      <tr>
+        <td>{{ forloop.counter }}</td>
+
+        <td>
+          {% if blog.image %}
+
+          <img
+            src="{{ blog.image.url }}"
+            width="70"
+            height="50"
+            style="object-fit: cover"
+          />
+
+          {% else %} No Image {% endif %}
+        </td>
+
+        <td>{{ blog.title }}</td>
+
+        <td>{{ blog.author_name }}</td>
+
+        <td>{{ blog.category }}</td>
+
+        <td>{{ blog.content|truncatewords:10 }}</td>
+
+        <td>{{ blog.created_at|date:"d M Y" }}</td>
+      </tr>
+
+      {% empty %}
+
+      <tr>
+        <td colspan="7" class="text-center">No blogs found.</td>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock content %}
